@@ -3,154 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Suruka Sales Staff Report</title>
     <style>
-        body { background-color: #000000; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        
-        .sticky-header { 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            background-color: rgba(0,0,0,0.98); 
-            border-bottom: 2px solid #00FF88;
-            padding: 10px 40px;
+        :root {
+            --dark: #0f2e22; --brand: #1b4d3e; --accent: #2e7d66; --glow: #eaf5f1;
+            --bg: #f3f7f5; --card: #ffffff; --text: #111b17; --muted: #52635c;
         }
-
-        .h-section { 
-            color: #ffffff; 
-            font-weight: 950; 
-            text-transform: uppercase; 
-            border-left: 10px solid #00FF88; 
-            padding-left: 15px; 
-            margin: 40px 0 20px 40px; 
-            display: block; 
-            font-size: 2rem;
-            letter-spacing: -1px;
-        }
-
-        .card { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 15px; }
-        .stat-label { color: #ffffff; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; opacity: 0.8; }
-        .stack-lg { font-size: 1.8rem; font-weight: 950; line-height: 1; letter-spacing: -1px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-top: 150px; min-height: 100vh; }
         
-        table { width: 100%; border-collapse: collapse; }
-        th { color: #ffffff; font-size: 11px; text-transform: uppercase; font-weight: 900; padding: 12px; border-bottom: 2px solid #333; text-align: left; background: #111; }
-        td { padding: 14px; border-bottom: 1px solid #1a1a1a; font-size: 1.1rem; font-weight: 800; color: #ffffff; }
+        /* Fixed Immobile Top Dashboard Cockpit */
+        .fixed-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: linear-gradient(135deg, var(--dark), var(--brand)); padding: 15px 40px; box-shadow: 0 8px 25px rgba(15,46,34,0.15); border-bottom: 2px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
+        .brand-title h1 { color: #fff; font-size: 1.3rem; text-transform: uppercase; letter-spacing: .05em; }
+        .brand-title span { color: var(--accent); font-size: 0.75rem; display: block; }
+        .kpi-row { display: flex; gap: 12px; }
+        .kpi-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 14px; min-width: 150px; }
+        .kpi-label { font-size: 0.65rem; color: #a3bfb5; text-transform: uppercase; }
+        .kpi-val { font-size: 1.15rem; font-weight: 700; color: #fff; }
+        .kpi-sub { font-size: 0.65rem; color: #729c8e; }
+
+        /* Workspace Grid & Big Round Circular Buttons */
+        .container { max-width: 1300px; margin: 0 auto; padding: 25px; }
+        .headline { font-size: 1rem; font-weight: 700; color: var(--brand); text-transform: uppercase; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 8px; }
+        .staff-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; margin-top: 15px; }
+        .avatar-circle { width: 145px; height: 145px; border-radius: 50%; background: var(--card); border: 3px solid rgba(27,77,62,0.08); cursor: pointer; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 12px; box-shadow: 0 4px 12px rgba(15,46,34,0.04); transition: all 0.25s ease; }
+        .avatar-circle:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 12px 24px rgba(46,125,102,0.15); }
+        .c-name { font-size: 0.85rem; font-weight: 700; color: var(--dark); line-height: 1.25; }
+        .c-star { color: #ca8a04; font-size: 0.65rem; font-weight: bold; margin-top: 4px; }
+        .c-badge { position: absolute; bottom: -4px; font-size: 0.6rem; font-weight: 700; padding: 2px 10px; border-radius: 12px; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* Full Separate Page View Design Layout */
+        .full-page-window { background: var(--card); border-radius: 16px; box-shadow: 0 15px 40px rgba(15,46,34,0.06); overflow: hidden; margin-top: 10px; animation: pageIn 0.35s ease; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .window-header { background: linear-gradient(90deg, var(--brand), var(--dark)); padding: 25px 40px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .window-header h2 { font-size: 1.4rem; }
+        .window-header p { font-size: 0.85rem; color: #a3bfb5; margin-top: 3px; }
+        .back-btn { background: var(--accent); color: #fff; border: none; padding: 10px 20px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: background 0.2s; }
+        .back-btn:hover { background: #235e4d; }
         
-        .text-food-green { color: #00FF88; }
-        .text-neon-red { color: #FF0000; }
-        .grid-container { padding: 0 40px; }
-        .today-banner { background: linear-gradient(90deg, #00FF88 0%, #004424 100%); color: #000; padding: 10px 20px; font-weight: 900; text-transform: uppercase; }
+        .window-body { padding: 40px; }
+        .matrix-table { width: 100%; border-collapse: collapse; margin-bottom: 35px; }
+        .matrix-table th { padding: 14px 24px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--muted); background: #f8faf9; text-align: left; border-bottom: 2px solid #eef2f0; }
+        .matrix-table td { padding: 16px 24px; font-size: 0.9rem; border-bottom: 1px solid #eef2f0; }
+        .matrix-table tr:hover td { background-color: #fafdfc; }
+        .coo-box { background: linear-gradient(135deg, #f0f7f4, #e6f2ed); border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0; padding: 25px; }
+        .coo-sig { font-size: 0.8rem; font-weight: 800; color: var(--brand); text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .coo-sig::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+        .coo-quote { font-style: italic; font-size: 0.95rem; color: #1c352d; line-height: 1.6; }
     </style>
 </head>
-
 <body>
 
-    <div class="sticky-header">
-        <div class="flex justify-between items-center mb-3">
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase">PAMPHILLS<span class="text-[#00FF88]">FOOD</span></h1>
-            <div class="text-right">
-                <span class="bg-white text-black px-2 py-1 text-[10px] font-black rounded">JANUARY 2026 AUDIT</span>
-            </div>
+    <div class="fixed-header">
+        <div class="brand-title">
+            <h1>Suruka Sales Staff Report</h1>
+            <span>Executive Metric Matrix Portal</span>
         </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="card border-none bg-zinc-900/40"><p class="stat-label">MTD Revenue</p><p class="stack-lg text-food-green">₦0.0k</p></div>
-            <div class="card border-none bg-zinc-900/40"><p class="stat-label">MTD Units Sold</p><p class="stack-lg">0</p></div>
-            <div class="card border-none bg-zinc-900/40"><p class="stat-label">MTD Expenses</p><p class="stack-lg text-neon-red">₦0.0k</p></div>
-            <div class="card border-none bg-zinc-900/40"><p class="stat-label">MTD Profit</p><p class="stack-lg text-food-green">₦0.0k</p></div>
+        <div class="kpi-row">
+            <div class="kpi-card"><div class="kpi-label">Avg Annual Rev</div><div class="kpi-val">₦676.77m</div><div class="kpi-sub">Total: ₦1,398.94m</div></div>
+            <div class="kpi-card"><div class="kpi-label">Total Customers</div><div class="kpi-val">33,006</div><div class="kpi-sub">Avg: 15,702 Clients</div></div>
+            <div class="kpi-card"><div class="kpi-label">Total Units Sold</div><div class="kpi-val">248,678</div><div class="kpi-sub">Avg: 114,763 Units</div></div>
+            <div class="kpi-card" style="border-color:var(--accent); background:rgba(46,125,102,0.2);"><div class="kpi-label">Best Performer (2025)</div><div class="kpi-val" style="color: #fcd34d;">Mary N. Inyang</div><div class="kpi-sub">2025 Rev: ₦242.99m</div></div>
         </div>
     </div>
 
-    <div class="grid-container">
+    <div class="container" id="page-content-wrapper"></div>
 
-        <span class="h-section">01. Today's Numbers (15/01/2026)</span>
-        <div class="card p-0 overflow-hidden mb-8 border-[#00FF88]/30">
-            <div class="today-banner">Current Daily Pulse</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Revenue</th>
-                        <th>Customers</th>
-                        <th>Units Sold</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-zinc-400">Today's Performance</td>
-                        <td class="text-food-green text-2xl">₦0.0k</td>
-                        <td>0 Customers</td>
-                        <td>0 Units</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <script>
+        const teamData = [
+            { id: "ewah_t", name: "Ewah Timothy", display: "Ewah<br>Timothy", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "August 2024", yrs: "2 Years", metrics: [{ cat: "Retention Perf Ratio", tot: "73.81%", avg: "73.81%", y24: "72.95%", y25: "77.87%", y26: "70.61%" }], feedback: "Timothy runs highly consistent system processing ratios baseline flat between 70% and 77%. Moving through late 2026, we target operational optimizations to drive a breakout past the 85% line." },
+            { id: "anthony_r", name: "Anthony Racheal Chat", display: "Anthony<br>Racheal", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "July 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦52.86m", avg: "₦52.86m", y24: "NIL", y25: "₦23.93m", y26: "₦28.93m" }, { cat: "Customers", tot: "949", avg: "949", y24: "NIL", y25: "508", y26: "441" }, { cat: "Units Sold", tot: "6.47k", avg: "6.47k", y24: "NIL", y25: "3.63k", y26: "2.85k" }], feedback: "Excellent profit optimization from Racheal. Despite a slight downward scale in transaction volume counts, her raw revenue grew to ₦28.93m—marking an enhanced high-value per account conversion setup." },
+            { id: "ige_c", name: "Ige Comfort Iyanuoluwa", display: "Ige<br>Comfort", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "December 2024", yrs: "2 Years", metrics: [{ cat: "Revenue", tot: "₦33.98m", avg: "₦16.99m", y24: "₦1.81m", y25: "₦32.17m", y26: "NIL" }, { cat: "Customers", tot: "289", avg: "244", y24: "63", y25: "226", y26: "NIL" }, { cat: "Units Sold", tot: "5.75k", avg: "2.87k", y24: "301", y25: "5.45k", y26: "NIL" }], feedback: "Comfort displayed exceptional vertical run rates through 2025, launching unit distribution from 301 to over 5.4k. Her resignation leaves structural volume slots that we are migrating to our core line teams." },
+            { id: "luka_b", name: "Luka Blessing Amaya", display: "Luka<br>Blessing", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "June 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦23.65m", avg: "₦23.65m", y24: "NIL", y25: "₦23.65m", y26: "NIL" }, { cat: "Customers", tot: "536", avg: "536", y24: "NIL", y25: "536", y26: "NIL" }, { cat: "Units Sold", tot: "3.75k", avg: "3.75k", y24: "NIL", y25: "3.75k", y26: "NIL" }], feedback: "Blessing maintained dense, highly predictable conversion matrices during her active cycles. This output data functions as an optimized playbook blueprint to enhance new talent onboarding pipelines." },
+            { id: "atanda_f", name: "Atanda Faith Boluwatife", display: "Atanda<br>Faith", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "September 2021", yrs: "5 Years", metrics: [{ cat: "Revenue", tot: "₦230.37m", avg: "₦46.07m", y24: "₦138.57m", y25: "₦169.84m", y26: "₦60.53m" }, { cat: "Customers", tot: "7.15k", avg: "1.43k", y24: "3.20k", y25: "3.21k", y26: "736" }, { cat: "Units Sold", tot: "57.64k", avg: "11.53k", y24: "28.87k", y25: "23.12k", y26: "5.65k" }], feedback: "Faith is a premier anchor for corporate client retention. Her dense 2025 metric stack reached ₦169.84m, showing an energetic historical run profile that continues to serve as an executive pillar for our team framework." },
+            { id: "nneka_v", name: "Nneka Victoria Ringo", display: "Nneka<br>Victoria", status: "Theft/Fired", bg: "#fee2e2", tc: "#991b1b", hired: "August 2023", yrs: "3 Years", metrics: [{ cat: "Revenue", tot: "₦96.81m", avg: "₦32.27m", y24: "₦58.05m", y25: "₦38.77m", y26: "NIL" }, { cat: "Customers", tot: "2,869", avg: "956", y24: "1,879", y25: "990", y26: "NIL" }, { cat: "Units Sold", tot: "20.00k", avg: "6.66k", y24: "14.47k", y25: "5.53k", y26: "NIL" }], feedback: "While her paper execution indices were extensive, high-level structural non-compliance erased record validity. We have built robust real-time audit protocols to permanently immunize team pipelines against risk." },
+            { id: "ogunleye_s", name: "Ogunleye Ifeoluwa Susan", display: "Ogunleye<br>Susan", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "May 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦56.25m", avg: "₦56.25m", y24: "NIL", y25: "₦30.22m", y26: "₦26.03m" }, { cat: "Customers", tot: "1,013", avg: "1,013", y24: "NIL", y25: "620", y26: "393" }, { cat: "Units Sold", tot: "7.45k", avg: "7.45k", y24: "NIL", y25: "4.59k", y26: "2.86k" }], feedback: "Susan drives remarkably predictable metric curves. Her 2026 velocity matches launch metrics flawlessly, classifying her as a core stabilizing component for baseline performance targets." },
+            { id: "odubanjo_e", name: "Odubanjo Elizabeth Omolewa", display: "Odubanjo<br>Elizabeth", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "January 2024", yrs: "2 Years", metrics: [{ cat: "Revenue", tot: "₦161.41m", avg: "₦80.71m", y24: "₦39.97m", y25: "₦96.06m", y26: "₦25.39m" }, { cat: "Customers", tot: "3.10k", avg: "1.55k", y24: "793", y25: "1.98k", y26: "327" }, { cat: "Units Sold", tot: "27.14k", avg: "13.57k", y24: "8.26k", y25: "16.01k", y26: "2.87k" }], feedback: "Elizabeth had a massive 2025 run bringing in ₦96.06m. However, her 2026 trends indicate system resistance and volume decay. An execution planning session is scheduled to unlock her channel bottlenecks." },
+            { id: "egiagbe_e", name: "Egiagbe Itohan Elizabeth", display: "Egiagbe<br>Itohan", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "August 2024", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦38.85m", avg: "₦38.85m", y24: "₦26.39m", y25: "₦12.47m", y26: "NIL" }, { cat: "Customers", tot: "1,320", avg: "1,320", y24: "989", y25: "331", y26: "NIL" }, { cat: "Units Sold", tot: "8.27k", avg: "8.27k", y24: "611", y25: "7.66k", y26: "NIL" }], feedback: "Elizabeth managed an impressive unit spike in 2025 scaling past 7.6k units before her exit. Her historic distribution lines are being split amongst active accounts to preserve active customer touchpoints." },
+            { id: "osatohanmwen_e", name: "Osatohanmwen Enabulele", display: "Osatohanmwen<br>Enabulele", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "December 2024", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦36.82m", avg: "₦36.82m", y24: "₦27.65m", y25: "₦9.17m", y26: "NIL" }, { cat: "Customers", tot: "1,109", avg: "1,109", y24: "886", y25: "223", y26: "NIL" }, { cat: "Units Sold", tot: "8.33k", avg: "8.33k", y24: "680", y25: "7.65k", y26: "NIL" }], feedback: "Enabulele demonstrated strong performance integration during late 2024 and 2025. Her data indicates excellent short-cycle customer conversion velocity that we want to replicate across modern campaigns." },
+            { id: "jaisri_n", name: "Jaisri Nwamaka Agunobi", display: "Jaisri<br>Nwamaka", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "June 2023", yrs: "3 Years", metrics: [{ cat: "Revenue", tot: "₦166.22m", avg: "₦55.41m", y24: "₦74.08m", y25: "₦65.02m", y26: "₦27.12m" }, { cat: "Customers", tot: "3.83k", avg: "1.28k", y24: "2.12k", y25: "1.32k", y26: "398" }, { cat: "Units Sold", tot: "30.16k", avg: "10.05k", y24: "8.08k", y25: "19.56k", y26: "2.52k" }], feedback: "Exceptional system conversion focus by Nwamaka. Her 2025 unit distribution doubled over past benchmarks while maintaining solid margin integrity. She is a foundational pillar of our sales organization." },
+            { id: "alfreda_i", name: "Alfreda Igarando", display: "Alfreda<br>Igarando", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "February 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦25.52m", avg: "₦25.52m", y24: "NIL", y25: "₦25.52m", y26: "NIL" }, { cat: "Customers", tot: "569", avg: "569", y24: "NIL", y25: "569", y26: "NIL" }, { cat: "Units Sold", tot: "3.79k", avg: "3.79k", y24: "NIL", y25: "3.79k", y26: "NIL" }], feedback: "Alfreda hit highly balanced conversion points during her 2025 sprint. Her structure models provide stable reference markers for forecasting performance behaviors in new territory projects." },
+            { id: "mary_n", name: "Mary Nsikan Inyang", display: "Mary<br>Nsikan", status: "Active", bg: "#d1fae5", tc: "#065f46", star: true, hired: "January 2023", yrs: "3 Years", metrics: [{ cat: "Revenue", tot: "₦397.23m", avg: "₦132.41m", y24: "₦54.45m", y25: "₦242.99m", y26: "₦99.79m" }, { cat: "Customers", tot: "7.69k", avg: "2.56k", y24: "1.36k", y25: "4.99k", y26: "1.34k" }, { cat: "Units Sold", tot: "56.88k", avg: "18.96k", y24: "9.73k", y25: "36.50k", y26: "10.65k" }], feedback: "Mary is our absolute elite growth anchor. Contributing a stunning ₦242.99m in 2025 alone, her pacing for 2026 is already leading the entire chart, showing world-class conversion efficiency." },
+            { id: "ehanire_d", name: "Ehanire Divine Oghogho", display: "Ehanire<br>Divine", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "October 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦31.45m", avg: "₦31.45m", y24: "NIL", y25: "₦9.66m", y26: "₦21.78m" }, { cat: "Customers", tot: "639", avg: "639", y24: "NIL", y25: "233", y26: "406" }, { cat: "Units Sold", tot: "4.34k", avg: "4.34k", y24: "NIL", y25: "1.63k", y26: "2.71k" }], feedback: "Phenomenal growth architecture. Divine's 2026 work run results have already completely eclipsed her entire 2025 baseline across revenue, clients, and units. Keep this explosive momentum up." },
+            { id: "esther_a", name: "Esther Ali Benson", display: "Esther<br>Ali", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "October 2025", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦27.44m", avg: "₦27.44m", y24: "NIL", y25: "₦11.18m", y26: "₦16.26m" }, { cat: "Customers", tot: "527", avg: "527", y24: "NIL", y25: "276", y26: "251" }, { cat: "Units Sold", tot: "3.59k", avg: "3.59k", y24: "NIL", y25: "1.95k", y26: "1.64k" }], feedback: "Esther maintained clear up-scaling velocity through late 2025 into 2026 before stepping down. Her steady upward conversion lines indicate excellent product positioning in her targeted pipelines." },
+            { id: "fidelia_e", name: "Fidelia ene Paul", display: "Fidelia<br>ene Paul", status: "Active", bg: "#d1fae5", tc: "#065f46", hired: "June 2026", yrs: "Recent Onboard", metrics: [{ cat: "Revenue", tot: "₦444.4k", avg: "₦444.4k", y24: "NIL", y25: "NIL", y26: "₦444.4k" }, { cat: "Customers", tot: "4", avg: "4", y24: "NIL", y25: "NIL", y26: "4" }, { cat: "Units Sold", tot: "28", avg: "28", y24: "NIL", y25: "NIL", y26: "28" }], feedback: "Fidelia was on-boarded in June 2026. While early data indexes are localized due to her recent start date, her operational system integration is active and configured cleanly for next-quarter scaling." },
+            { id: "kadiri_n", name: "Kadiri Nana Fatima", display: "Kadiri<br>Nana", status: "Resigned", bg: "#fee2e2", tc: "#991b1b", hired: "August 2023", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦16.90m", avg: "₦16.90m", y24: "₦16.90m", y25: "NIL", y26: "NIL" }, { cat: "Customers", tot: "668", avg: "668", y24: "668", y25: "NIL", y26: "NIL" }, { cat: "Units Sold", tot: "4.22k", avg: "4.22k", y24: "4.22k", y25: "NIL", y26: "NIL" }], feedback: "Nana historical numbers represent solid transactional efficiency windows in 2024. Her data profile outlines healthy velocity parameters that serve as structural reference logs." },
+            { id: "obiajulu_r", name: "Obiajulu Rebecca Chibuzor", display: "Obiajulu<br>Rebecca", status: "Fired", bg: "#fef3c7", tc: "#92400e", hired: "October 2024", yrs: "1 Year", metrics: [{ cat: "Revenue", tot: "₦2.73m", avg: "₦2.73m", y24: "₦2.73m", y25: "NIL", y26: "NIL" }, { cat: "Customers", tot: "145", avg: "145", y24: "145", y25: "NIL", y26: "NIL" }, { cat: "Units Sold", tot: "878", avg: "878", y24: "878", y25: "NIL", y26: "NIL" }], feedback: "Rebecca's conversion patterns failed to reach baseline targets during her tracking window, triggering structural exit protocols. Active line-monitoring is updated to enforce early course corrections." }
+        ];
 
-        <span class="h-section">02. This Month (January Full Breakdown)</span>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <div class="card p-0 overflow-hidden">
-                <table>
-                    <thead><tr><th>January Financials</th><th class="text-right">Amount</th></tr></thead>
-                    <tbody>
-                        <tr><td>January Revenue</td><td class="text-right text-food-green">₦0.0k</td></tr>
-                        <tr><td>January Expenses</td><td class="text-right text-neon-red">₦0.0k</td></tr>
-                        <tr class="bg-zinc-900/50"><td>January Profit</td><td class="text-right text-food-green">₦0.0k</td></tr>
-                        <tr><td>January Margin</td><td class="text-right">0.00%</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card p-0 overflow-hidden">
-                <table>
-                    <thead><tr><th>January Volume</th><th class="text-right">Count</th></tr></thead>
-                    <tbody>
-                        <tr><td>Total Customers</td><td class="text-right">0</td></tr>
-                        <tr><td>Total Units Sold</td><td class="text-right">0</td></tr>
-                        <tr><td>New Customers</td><td class="text-right">0</td></tr>
-                        <tr><td>Returning Customers</td><td class="text-right">0</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        function showDashboard() {
+            const container = document.getElementById('page-content-wrapper');
+            const circlesHtml = teamData.map(p => `
+                <div class="avatar-circle" onclick="goToFullPage('${p.id}')">
+                    <div class="c-name">${p.display}</div>
+                    ${p.star ? `<div class="c-star">★ Best 2025</div>` : ''}
+                    <div class="c-badge" style="background:${p.bg}; color:${p.tc};">${p.status}</div>
+                </div>
+            `).join('');
 
-        <span class="h-section">03. Medium Breakdown</span>
-        <div class="card p-0 overflow-hidden mb-12">
-            <table>
-                <thead><tr><th>Channel</th><th>Revenue</th><th class="text-right">% Contribution</th></tr></thead>
-                <tbody>
-                    <tr><td>WhatsApp</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Instagram - Ads</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Calls / Direct</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Staff / Gym / Referrals</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Supermarkets & Malls</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Others (Trade Fair/Events)</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                </tbody>
-            </table>
-        </div>
+            container.innerHTML = `
+                <div class="headline">Select a staff circle to enter their separate profile data page</div>
+                <div class="staff-grid">${circlesHtml}</div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-        <span class="h-section">04. Comparison (Jan vs Dec)</span>
-        <div class="card mb-20 p-0 overflow-hidden">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>January (MTD)</th>
-                        <th>December (Full)</th>
-                        <th class="text-right">Margin %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Revenue</td><td>₦0.0k</td><td>₦0.0k</td><td class="text-right">0.00%</td></tr>
-                    <tr><td>Expenses</td><td class="text-neon-red">₦0.0k</td><td>₦0.0k</td><td class="text-right text-neon-red">0.00%</td></tr>
-                    <tr class="bg-zinc-900/30"><td>Net Profit</td><td class="text-food-green">₦0.0k</td><td>₦0.0k</td><td class="text-right text-food-green">0.00%</td></tr>
-                </tbody>
-            </table>
-        </div>
+        function goToFullPage(id) {
+            const staff = teamData.find(p => p.id === id);
+            const tableRows = staff.metrics.map(m => `
+                <tr><td>${m.cat}</td><td style="font-weight:700; color:var(--brand);">${m.tot}</td><td>${m.avg}</td><td>${m.y24}</td><td>${m.y25}</td><td>${m.y26}</td></tr>
+            `).join('');
 
-    </div>
+            const container = document.getElementById('page-content-wrapper');
+            container.innerHTML = `
+                <div class="full-page-window">
+                    <div class="window-header">
+                        <div>
+                            <h2>${staff.name} ${staff.star ? '★' : ''}</h2>
+                            <p>Hired: ${staff.hired} • Tenure Track: ${staff.yrs} With Us (${staff.status})</p>
+                        </div>
+                        <button class="back-btn" onclick="showDashboard()">← Back to Dashboard</button>
+                    </div>
+                    <div class="window-body">
+                        <table class="matrix-table">
+                            <thead><tr><th>Functional Metric Vector</th><th>TOTAL</th><th>Annual AVG</th><th>2024</th><th>2025</th><th>2026</th></tr></thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                        <div class="coo-box">
+                            <div class="coo-sig">Analysis Feedback from C.O.O Luis</div>
+                            <div class="coo-quote">"${staff.feedback}"</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-    <footer class="text-center py-20 border-t border-zinc-900 opacity-20">
-        <p class="text-xl font-black text-white uppercase tracking-[15px]">Pamphills Food Audit</p>
-    </footer>
-
+        showDashboard();
+    </script>
 </body>
 </html>
